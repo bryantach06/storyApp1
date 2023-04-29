@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="splash_title">Story App</string>
+    <string name="login_title">Story App Login</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_btn">Login</string>
+    <string name="sign_in">Don\'t have an account? Sign Up Here!</string>
+    <string name="register_title">Register to Story App</string>
+    <string name="register_name">Name</string>
+    <string name="register_button">Register</string>
+    <string name="name_hint">Name</string>
+    <string name="item_name">Name</string>
+    <string name="item_story">Story</string>
+    <string name="item_story_image">Story Image</string>
+    <string name="logout_menu">Logout</string>
+    <string name="created_at">Created at</string>
+    <string name="welcome_back">Welcome back, user!</string>
+    <string name="detail_story_image">Detail Story Image</string>
+    <string name="add_story_fab">Add Story Button</string>
+    <string name="add_story_image">Add Story Image</string>
+    <string name="et_storyDesc">Input Story Description</string>
+    <string name="btn_gallery">Gallery</string>
+    <string name="btn_camera">Camera</string>
+    <string name="btn_upload_story">Upload Story</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="switch_camera">Switch Camera</string>
+</resources>
