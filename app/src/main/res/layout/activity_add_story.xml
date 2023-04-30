@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddStoryActivity">
+    tools:context=".activities.AddStoryActivity">
 
     <ImageView
         android:id="@+id/iv_addStory"
@@ -17,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@drawable/baseline_camera_alt_24"
-        android:background="@color/teal_200"
         android:contentDescription="@string/add_story_image" />
 
     <Button

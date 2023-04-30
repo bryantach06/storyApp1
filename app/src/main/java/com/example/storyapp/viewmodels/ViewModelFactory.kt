@@ -1,7 +1,8 @@
-package com.example.storyapp
+package com.example.storyapp.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.storyapp.models.UserPreference
 
 class ViewModelFactory(private val pref: UserPreference) : ViewModelProvider.NewInstanceFactory() {
 

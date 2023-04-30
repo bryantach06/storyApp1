@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.example.storyapp.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +24,7 @@ class SplashScreen : AppCompatActivity() {
         )
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, LoginPage::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }, 3000)

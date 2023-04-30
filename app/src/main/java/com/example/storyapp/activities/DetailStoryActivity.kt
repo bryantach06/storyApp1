@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.example.storyapp.activities
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -8,6 +8,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import com.bumptech.glide.Glide
 import com.example.storyapp.databinding.ActivityDetailStoryBinding
+import com.example.storyapp.responses.ListStoryItem
 
 class DetailStoryActivity : AppCompatActivity() {
 

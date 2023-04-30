@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.example.storyapp.activities
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,7 +14,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.storyapp.*
 import com.example.storyapp.databinding.ActivityMainBinding
+import com.example.storyapp.models.UserPreference
+import com.example.storyapp.responses.ListStoryItem
+import com.example.storyapp.viewmodels.MainViewModel
+import com.example.storyapp.viewmodels.ViewModelFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 

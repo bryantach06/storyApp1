@@ -1,5 +1,7 @@
-package com.example.storyapp
+package com.example.storyapp.activities
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -14,11 +16,16 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.example.storyapp.*
 import com.example.storyapp.databinding.ActivityLoginPageBinding
+import com.example.storyapp.models.UserModel
+import com.example.storyapp.models.UserPreference
+import com.example.storyapp.viewmodels.LoginViewModel
+import com.example.storyapp.viewmodels.ViewModelFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-class LoginPage : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginPageBinding
     private lateinit var viewModel: LoginViewModel
@@ -29,7 +36,7 @@ class LoginPage : AppCompatActivity() {
         binding = ActivityLoginPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.textView3.setOnClickListener{
+        binding.tvSignUp.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
@@ -37,6 +44,21 @@ class LoginPage : AppCompatActivity() {
         setupView()
         setupViewModel()
         setupAction()
+        setupAnimation()
+    }
+
+    private fun setupAnimation() {
+        val title = ObjectAnimator.ofFloat(binding.tvLoginTitle, View.ALPHA, 1f).setDuration(300)
+        val email = ObjectAnimator.ofFloat(binding.tilLoginEmail, View.ALPHA, 1f).setDuration(300)
+        val password = ObjectAnimator.ofFloat(binding.tilLoginPassword, View.ALPHA, 1f).setDuration(300)
+        val btnLogin = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(300)
+        val signUp = ObjectAnimator.ofFloat(binding.tvSignUp, View.ALPHA, 1f).setDuration(300)
+
+        AnimatorSet().apply {
+            playSequentially(title, email, password, btnLogin, signUp)
+            startDelay = 500
+            start()
+        }
     }
 
     private fun setupView() {

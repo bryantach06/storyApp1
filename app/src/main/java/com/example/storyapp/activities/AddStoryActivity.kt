@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.example.storyapp.activities
 
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
@@ -12,9 +12,20 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.storyapp.*
+import com.example.storyapp.api.ApiConfig
 import com.example.storyapp.databinding.ActivityAddStoryBinding
+import com.example.storyapp.responses.UploadStoryResponse
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 class AddStoryActivity : AppCompatActivity() {
@@ -57,6 +68,8 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.ivAddStory.setImageResource(R.drawable.baseline_camera_alt_24)
+
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -71,6 +84,10 @@ class AddStoryActivity : AppCompatActivity() {
 
         binding.btnGallery.setOnClickListener {
             startGallery()
+        }
+
+        binding.buttonAdd.setOnClickListener {
+            uploadImage()
         }
 
         setupView()
@@ -102,6 +119,7 @@ class AddStoryActivity : AppCompatActivity() {
             val isBackCamera = it.data?.getBooleanExtra("isBackCamera", true) as Boolean
             myFile?.let { file ->
                 rotateFile(file, isBackCamera)
+                getFile = file
                 binding.ivAddStory.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
         }
@@ -113,10 +131,66 @@ class AddStoryActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val selectedImg = result.data?.data as Uri
             selectedImg.let { uri ->
-                uriToFile(uri, this@AddStoryActivity)
+                val myFile = uriToFile(uri, this@AddStoryActivity)
+                getFile = myFile
                 binding.ivAddStory.setImageURI(uri)
             }
         }
+    }
+
+    private fun uploadImage() {
+        if (getFile != null) {
+
+            val file = reduceFileImage(getFile as File)
+
+//            val description = "Ini adalah deksripsi gambar".toRequestBody("text/plain".toMediaType())
+            val description = binding.edAddDescription.text.toString().toRequestBody()
+            val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
+            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "photo",
+                file.name,
+                requestImageFile
+            )
+            val loginSession = LoginSession(this)
+            val apiService = ApiConfig.getApiService()
+            val uploadImageRequest = apiService.uploadStory("Bearer ${loginSession.passToken().toString()}", imageMultipart, description)
+            uploadImageRequest.enqueue(object : Callback<UploadStoryResponse> {
+                override fun onResponse(
+                    call: Call<UploadStoryResponse>,
+                    response: Response<UploadStoryResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null && !responseBody.error) {
+                            Toast.makeText(this@AddStoryActivity, responseBody.message, Toast.LENGTH_SHORT).show()
+                            AlertDialog.Builder(this@AddStoryActivity).apply {
+                                setTitle("Yeah!")
+                                setMessage("Upload story berhasil!")
+                                setPositiveButton("Lihat Story") {_, _ ->
+                                    val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    startActivity(intent)
+                                    finish()
+                                }
+                                create()
+                                show()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this@AddStoryActivity, response.message(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<UploadStoryResponse>, t: Throwable) {
+                    Toast.makeText(this@AddStoryActivity, t.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(this@AddStoryActivity, "Silakan masukkan berkas gambar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun reduceFileImage(file: File): File {
+        return file
     }
 
     private fun setupView() {

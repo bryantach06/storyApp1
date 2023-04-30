@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.storyapp.databinding.StoryItemBinding
+import com.example.storyapp.responses.ListStoryItem
 import java.util.*
 import kotlin.collections.ArrayList
 

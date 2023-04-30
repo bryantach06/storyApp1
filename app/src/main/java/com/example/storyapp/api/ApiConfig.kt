@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.example.storyapp.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -10,25 +10,25 @@
     android:layout_marginTop="4dp"
     android:layout_marginRight="8dp"
     android:layout_marginBottom="4dp"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="367dp"
         android:padding="10dp">
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="355dp"
             android:layout_height="237dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/item_story_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:contentDescription="@string/item_story_image" />
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -37,6 +37,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/item_name"
+            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imageView2"
@@ -51,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/item_story"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintHorizontal_bias="0.0"
@@ -64,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/created_at"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/tv_name"
             app:layout_constraintEnd_toEndOf="@+id/imageView2"
             app:layout_constraintHorizontal_bias="1.0"

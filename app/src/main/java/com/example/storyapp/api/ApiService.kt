@@ -1,5 +1,9 @@
-package com.example.storyapp
+package com.example.storyapp.api
 
+import com.example.storyapp.responses.LoginResponse
+import com.example.storyapp.responses.RegisterResponse
+import com.example.storyapp.responses.StoriesResponse
+import com.example.storyapp.responses.UploadStoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

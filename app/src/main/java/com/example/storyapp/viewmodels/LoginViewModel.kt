@@ -1,8 +1,11 @@
-package com.example.storyapp
+package com.example.storyapp.viewmodels
 
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.*
+import com.example.storyapp.models.UserModel
+import com.example.storyapp.models.UserPreference
+import com.example.storyapp.api.ApiConfig
+import com.example.storyapp.responses.LoginResponse
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

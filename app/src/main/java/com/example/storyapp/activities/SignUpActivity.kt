@@ -1,9 +1,13 @@
-package com.example.storyapp
+package com.example.storyapp.activities
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
@@ -12,11 +16,16 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.example.storyapp.viewmodels.SignupViewModel
+import com.example.storyapp.models.UserModel
+import com.example.storyapp.models.UserPreference
+import com.example.storyapp.viewmodels.ViewModelFactory
+import com.example.storyapp.api.ApiConfig
 import com.example.storyapp.databinding.ActivitySignUpBinding
+import com.example.storyapp.responses.RegisterResponse
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -33,6 +42,21 @@ class SignUpActivity : AppCompatActivity() {
         setupView()
         setupViewModel()
         setupAction()
+        setupAnimation()
+    }
+
+    private fun setupAnimation() {
+        val title = ObjectAnimator.ofFloat(binding.tvSignupTitle, View.ALPHA, 1f).setDuration(300)
+        val name = ObjectAnimator.ofFloat(binding.nameRegisterTil, View.ALPHA, 1f).setDuration(300)
+        val email = ObjectAnimator.ofFloat(binding.emailRegisterTil, View.ALPHA, 1f).setDuration(300)
+        val password = ObjectAnimator.ofFloat(binding.passwordRegisterTil, View.ALPHA, 1f).setDuration(300)
+        val btnSignUp = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(300)
+
+        AnimatorSet().apply {
+            playSequentially(title, name, email, password, btnSignUp)
+            startDelay = 500
+            start()
+        }
     }
 
     private fun setupView() {
@@ -103,14 +127,11 @@ class SignUpActivity : AppCompatActivity() {
                         }
 
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                            TODO("Not yet implemented")
+                            Log.d("SignUpActivity", "${t.message}")
                         }
-
                     })
-
                 }
             }
         }
     }
-
 }

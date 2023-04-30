@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.example.storyapp.activities
 
 import android.content.Intent
 import android.os.Build
@@ -13,8 +13,8 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import com.example.storyapp.createFile
 import com.example.storyapp.databinding.ActivityCameraBinding
-import java.nio.file.Files.createFile
 
 class CameraActivity : AppCompatActivity() {
 
