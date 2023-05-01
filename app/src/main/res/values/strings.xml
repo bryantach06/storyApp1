@@ -25,4 +25,5 @@
     <string name="btn_upload_story">Upload Story</string>
     <string name="capture_image">Capture Image</string>
     <string name="switch_camera">Switch Camera</string>
+    <string name="logout_button">Logout Button</string>
 </resources>
