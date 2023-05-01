@@ -31,7 +31,6 @@ import java.io.File
 class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
-    private lateinit var imagePath: String
 
     private var getFile: File? = null
 
@@ -170,6 +169,7 @@ class AddStoryActivity : AppCompatActivity() {
                                     val intent = Intent(this@AddStoryActivity, MainActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                     startActivity(intent)
+                                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                                     finish()
                                 }
                                 create()

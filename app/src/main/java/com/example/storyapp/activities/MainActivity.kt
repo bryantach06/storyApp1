@@ -6,9 +6,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
+import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -78,6 +77,24 @@ class MainActivity : AppCompatActivity() {
         binding.fabAddStory.setOnClickListener {
             val intent = Intent(this@MainActivity, AddStoryActivity::class.java)
             startActivity(intent)
+
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        binding.fabLogout.setOnClickListener {
+            AlertDialog.Builder(this@MainActivity).apply {
+                setTitle("Logout")
+                setMessage("Apakah anda yakin ingin logout?")
+                setPositiveButton("Ya") {_, _ ->
+                    session.logoutSession()
+                    finish()
+
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+                create()
+                show()
+            }
         }
 
         setupView()
