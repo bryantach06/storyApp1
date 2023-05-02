@@ -35,12 +35,6 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun logout() {
-        dataStore.edit { preferences ->
-            preferences[STATE_KEY] = false
-        }
-    }
-
     companion object {
         @Volatile
         private var INSTANCE: UserPreference? = null

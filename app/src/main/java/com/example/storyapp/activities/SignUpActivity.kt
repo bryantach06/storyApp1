@@ -12,12 +12,12 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.example.storyapp.viewmodels.SignupViewModel
-import com.example.storyapp.models.UserModel
 import com.example.storyapp.models.UserPreference
 import com.example.storyapp.viewmodels.ViewModelFactory
 import com.example.storyapp.api.ApiConfig
@@ -48,8 +48,10 @@ class SignUpActivity : AppCompatActivity() {
     private fun setupAnimation() {
         val title = ObjectAnimator.ofFloat(binding.tvSignupTitle, View.ALPHA, 1f).setDuration(300)
         val name = ObjectAnimator.ofFloat(binding.nameRegisterTil, View.ALPHA, 1f).setDuration(300)
-        val email = ObjectAnimator.ofFloat(binding.emailRegisterTil, View.ALPHA, 1f).setDuration(300)
-        val password = ObjectAnimator.ofFloat(binding.passwordRegisterTil, View.ALPHA, 1f).setDuration(300)
+        val email =
+            ObjectAnimator.ofFloat(binding.emailRegisterTil, View.ALPHA, 1f).setDuration(300)
+        val password =
+            ObjectAnimator.ofFloat(binding.passwordRegisterTil, View.ALPHA, 1f).setDuration(300)
         val btnSignUp = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(300)
 
         AnimatorSet().apply {
@@ -79,59 +81,66 @@ class SignUpActivity : AppCompatActivity() {
         )[SignupViewModel::class.java]
     }
 
+    private fun setMyButtonEnable() {
+        val name = binding.edRegisterName.text
+        val email = binding.edRegisterEmail.text
+        val password = binding.edRegisterPassword.text
+        binding.btnRegister.isEnabled =
+            name != null && email != null && password != null && name.toString()
+                .isNotEmpty() && email.toString().isNotEmpty() && password.toString().isNotEmpty()
+    }
+
     private fun setupAction() {
+        binding.edRegisterName.addTextChangedListener {
+            setMyButtonEnable()
+        }
+
+        binding.edRegisterEmail.addTextChangedListener {
+            setMyButtonEnable()
+        }
+
+        binding.edRegisterPassword.addTextChangedListener {
+            setMyButtonEnable()
+        }
+
         binding.btnRegister.setOnClickListener {
             val name = binding.edRegisterName.text.toString()
             val email = binding.edRegisterEmail.text.toString()
             val password = binding.edRegisterPassword.text.toString()
-            when {
-                name.isEmpty() -> {
-                    binding.nameRegisterTil.error = "Masukkan email"
-                }
-                email.isEmpty() -> {
-                    binding.emailRegisterTil.error = "Masukkan email"
-                }
-                password.isEmpty() -> {
-                    binding.passwordRegisterTil.error = "Masukkan password"
-                }
-                else -> {
-                    viewModel.saveUser(UserModel(name, email, password, false))
-                    val client = ApiConfig.getApiService().onRegister(name, email, password)
-                    client.enqueue(object : retrofit2.Callback<RegisterResponse> {
-                        override fun onResponse(
-                            call: Call<RegisterResponse>,
-                            response: Response<RegisterResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                val responseBody = response.body()
-                                if (responseBody != null && !responseBody.error) {
-                                    AlertDialog.Builder(this@SignUpActivity).apply {
-                                        setTitle("Yeah!")
-                                        setMessage("Kamu berhasil registrasi. Yuk Login!")
-                                        setPositiveButton("Login") { _, _ ->
-                                            finish()
-                                        }
-                                        create()
-                                        show()
-                                    }
+            val client = ApiConfig.getApiService().onRegister(name, email, password)
+            client.enqueue(object : retrofit2.Callback<RegisterResponse> {
+                override fun onResponse(
+                    call: Call<RegisterResponse>,
+                    response: Response<RegisterResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null && !responseBody.error) {
+                            AlertDialog.Builder(this@SignUpActivity).apply {
+                                setTitle("Yeah!")
+                                setMessage("Kamu berhasil registrasi. Yuk Login!")
+                                setPositiveButton("Login") { _, _ ->
+                                    finish()
                                 }
-                            } else {
-                                val jsonObj =
-                                    JSONObject(response.errorBody()!!.charStream().readText())
-                                Toast.makeText(
-                                    this@SignUpActivity,
-                                    jsonObj.getString("message"),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                create()
+                                show()
                             }
                         }
-
-                        override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                            Log.d("SignUpActivity", "${t.message}")
-                        }
-                    })
+                    } else {
+                        val jsonObj =
+                            JSONObject(response.errorBody()!!.charStream().readText())
+                        Toast.makeText(
+                            this@SignUpActivity,
+                            jsonObj.getString("message"),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
+
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    Log.d("SignUpActivity", "${t.message}")
+                }
+            })
         }
     }
 }

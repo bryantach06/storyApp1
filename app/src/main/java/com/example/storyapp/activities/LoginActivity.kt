@@ -12,6 +12,7 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -36,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.tvSignUp.setOnClickListener{
+        binding.tvSignUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
@@ -50,7 +51,8 @@ class LoginActivity : AppCompatActivity() {
     private fun setupAnimation() {
         val title = ObjectAnimator.ofFloat(binding.tvLoginTitle, View.ALPHA, 1f).setDuration(300)
         val email = ObjectAnimator.ofFloat(binding.tilLoginEmail, View.ALPHA, 1f).setDuration(300)
-        val password = ObjectAnimator.ofFloat(binding.tilLoginPassword, View.ALPHA, 1f).setDuration(300)
+        val password =
+            ObjectAnimator.ofFloat(binding.tilLoginPassword, View.ALPHA, 1f).setDuration(300)
         val btnLogin = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(300)
         val signUp = ObjectAnimator.ofFloat(binding.tvSignUp, View.ALPHA, 1f).setDuration(300)
 
@@ -86,49 +88,50 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun setMyButtonEnable() {
+        val email = binding.edLoginEmail.text
+        val password = binding.myEditText.text
+        binding.btnLogin.isEnabled =
+            email != null && password != null && email.toString()
+                .isNotEmpty() && password.toString().isNotEmpty()
+    }
+
     private fun setupAction() {
+        binding.edLoginEmail.addTextChangedListener {
+            setMyButtonEnable()
+        }
+
+        binding.myEditText.addTextChangedListener {
+            setMyButtonEnable()
+        }
+
         binding.btnLogin.setOnClickListener {
             val email = binding.edLoginEmail.text.toString()
             val password = binding.myEditText.text.toString()
-            when {
-                email.isEmpty() -> {
-                    binding.edLoginEmail.error = "Masukkan email"
-                }
-                password.isEmpty() -> {
-                    binding.myEditText.error = "Masukkan password"
-                }
-                email != user.email -> {
-                    binding.edLoginEmail.error = "Email tidak sesuai"
-                }
-                password != user.password -> {
-                    binding.myEditText.error = "Password tidak sesuai"
-                }
-                else -> {
-                    viewModel.doLogin(email, password)
-                    viewModel.login()
-                    viewModel.userLogin.observe(this){
-                        val loginSession = LoginSession(this)
-                        loginSession.saveToken(it.loginResult.token)
-                        Log.d("LoginActivity", "token : ${loginSession.passToken().toString()}")
-                        AlertDialog.Builder(this).apply {
-                            setTitle("Yeah!")
-                            setMessage("Anda berhasil login. Sudah siap membagikan cerita anda?")
-                            setPositiveButton("Siap!") { _, _ ->
-                                val intent = Intent(context, MainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                startActivity(intent)
-                                finish()
-                            }
-                            create()
-                            show()
-                        }
+            viewModel.doLogin(email, password)
+            viewModel.login()
+            viewModel.userLogin.observe(this) {
+                val loginSession = LoginSession(this)
+                loginSession.saveToken(it.loginResult.token)
+                Log.d("LoginActivity", "token : ${loginSession.passToken().toString()}")
+                AlertDialog.Builder(this).apply {
+                    setTitle("Yeah!")
+                    setMessage("Anda berhasil login. Sudah siap membagikan cerita anda?")
+                    setPositiveButton("Siap!") { _, _ ->
+                        val intent = Intent(context, MainActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
                     }
-                    viewModel.isLoading.observe(this) { isLoading ->
-                        showLoading(isLoading)
-                    }
-
+                    create()
+                    show()
                 }
             }
+            viewModel.isLoading.observe(this) { isLoading ->
+                showLoading(isLoading)
+            }
+
         }
     }
 

@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/til_login_email"
         app:layout_constraintVertical_bias="0.0">
 
-        <com.example.storyapp.MyEditText
+        <com.example.storyapp.customViews.MyEditText
             android:id="@+id/myEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,18 +80,9 @@
             app:layout_constraintTop_toBottomOf="@+id/til_login_email"
             app:layout_constraintVertical_bias="0.0" />
 
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/ed_login_password"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:ellipsize="end"-->
-<!--            android:maxLines="1"-->
-<!--            tools:ignore="KeyboardInaccessibleWidget" />-->
-
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <Button
+    <com.example.storyapp.customViews.MyCustomButton
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,6 +91,7 @@
         android:layout_marginEnd="16dp"
         android:text="@string/login_btn"
         android:alpha="0"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/til_login_password"
         app:layout_constraintStart_toStartOf="@+id/til_login_password"

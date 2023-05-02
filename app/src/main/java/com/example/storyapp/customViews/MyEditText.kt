@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.example.storyapp.customViews
 
 import android.content.Context
 import android.text.InputType

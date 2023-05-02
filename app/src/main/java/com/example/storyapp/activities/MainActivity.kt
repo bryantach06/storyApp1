@@ -57,12 +57,6 @@ class MainActivity : AppCompatActivity() {
             ViewModelFactory(UserPreference.getInstance(dataStore))
         )[MainViewModel::class.java]
 
-        viewModel.getUser().observe(this) {user ->
-            if (user.isLoggedIn) {
-                binding.tvWelcomeBack.text = "Welcome Back, ${user.name}!"
-            }
-        }
-
         val session = LoginSession(this)
         val token = session.passToken().toString()
         viewModel.getStories("Bearer $token")
