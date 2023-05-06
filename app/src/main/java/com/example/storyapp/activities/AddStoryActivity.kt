@@ -189,9 +189,9 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun reduceFileImage(file: File): File {
-        return file
-    }
+//    private fun reduceFileImage(file: File): File {
+//        return file
+//    }
 
     private fun setupView() {
         @Suppress("DEPRECATION")

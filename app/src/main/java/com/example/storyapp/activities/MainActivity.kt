@@ -57,14 +57,19 @@ class MainActivity : AppCompatActivity() {
             ViewModelFactory(UserPreference.getInstance(dataStore))
         )[MainViewModel::class.java]
 
-        val session = LoginSession(this)
-        val token = session.passToken().toString()
-        viewModel.getStories("Bearer $token")
-        showLoading(true)
-        viewModel.storiesResponse.observe(this) {
-            if (it != null) {
-                adapter.setListStories(it.listStory)
-                showLoading(false)
+        viewModel.getUserToken().observe(this) {token ->
+            if (token.isNotEmpty()){
+                viewModel.getStories("Bearer $token")
+                showLoading(true)
+                viewModel.storiesResponse.observe(this) {
+                    if (it != null) {
+                        adapter.setListStories(it.listStory)
+                        showLoading(false)
+                    }
+                }
+            } else {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
             }
         }
 
@@ -80,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                 setTitle("Logout")
                 setMessage("Apakah anda yakin ingin logout?")
                 setPositiveButton("Ya") {_, _ ->
-                    session.logoutSession()
+                    viewModel.logout()
                     finish()
 
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)

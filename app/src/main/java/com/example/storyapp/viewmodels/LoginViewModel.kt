@@ -38,11 +38,12 @@ class LoginViewModel (private val pref: UserPreference) : ViewModel() {
                 response: Response<LoginResponse>
             ) {
                 if (response.isSuccessful) {
+                    val result = response.body()?.loginResult?.token
                     val responseBody = response.body()
+                    result?.let { saveUserToken(it) }
                     _isLoading.postValue(false)
                     if (responseBody != null && !responseBody.error) {
                         _userLogin.postValue(response.body())
-
                     }
                 }
             }
@@ -52,5 +53,11 @@ class LoginViewModel (private val pref: UserPreference) : ViewModel() {
                 _isLoading.postValue(false)
             }
         })
+    }
+
+    private fun saveUserToken(key: String) {
+        viewModelScope.launch {
+            pref.saveToken(key)
+        }
     }
 }

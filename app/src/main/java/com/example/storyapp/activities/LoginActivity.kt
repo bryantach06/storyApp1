@@ -102,7 +102,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.myEditText.addTextChangedListener {
-            setMyButtonEnable()
+            val password = binding.myEditText.text
+            if (password?.length!! >= 8) {
+                setMyButtonEnable()
+            } else {
+                binding.btnLogin.isEnabled = false
+            }
         }
 
         binding.btnLogin.setOnClickListener {

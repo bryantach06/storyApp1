@@ -1,14 +1,11 @@
 package com.example.storyapp.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.example.storyapp.models.UserModel
+import androidx.lifecycle.*
 import com.example.storyapp.models.UserPreference
 import com.example.storyapp.api.ApiConfig
 import com.example.storyapp.responses.StoriesResponse
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,10 +14,6 @@ class MainViewModel(private val pref: UserPreference) : ViewModel() {
 
     private val _storiesResponse = MutableLiveData<StoriesResponse>()
     val storiesResponse: LiveData<StoriesResponse> = _storiesResponse
-
-    fun getUser(): LiveData<UserModel> {
-        return pref.getUser().asLiveData()
-    }
 
     fun getStories(token: String) {
         ApiConfig.getApiService().getStories(token).enqueue(object : Callback<StoriesResponse> {
@@ -38,4 +31,13 @@ class MainViewModel(private val pref: UserPreference) : ViewModel() {
         })
     }
 
+    fun getUserToken() = pref.getToken().asLiveData()
+
+    fun logout() = deleteUserToken()
+
+    private fun deleteUserToken(){
+        viewModelScope.launch {
+            pref.deleteToken()
+        }
+    }
 }
