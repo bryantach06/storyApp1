@@ -75,10 +75,10 @@ class MainViewModelTest {
         assertNotNull(actualStories)
 
         //jumlah data sesuai dengan yang diharapkan
-        assertEquals(expectedStories, storyRepository.getStory())
+        assertEquals(dummyStory.size, differ.snapshot().size)
 
         //data pertama yang dikembalikan sesuai
-        assertEquals(dummyStory[0].id, differ.snapshot()[0]?.id)
+        assertEquals(dummyStory[0], differ.snapshot()[0])
     }
 
     @Test

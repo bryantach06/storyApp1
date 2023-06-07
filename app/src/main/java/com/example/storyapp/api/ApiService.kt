@@ -13,7 +13,7 @@ interface ApiService {
     @GET("stories")
     fun getStoriesWithLocation(
         @Header("Authorization") token: String,
-        @Query("location") includeLocation: Int? = null
+        @Query("location") includeLocation: Int? = 1
     ): Call<StoriesResponse>
 
     @GET("stories")
