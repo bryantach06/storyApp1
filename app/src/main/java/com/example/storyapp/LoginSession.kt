@@ -20,8 +20,4 @@ class LoginSession(context: Context) {
     fun passToken(): String? {
         return loginSession.getString(TOKEN_KEY, null)
     }
-
-    fun logoutSession() {
-        loginSession.edit().clear().apply()
-    }
 }

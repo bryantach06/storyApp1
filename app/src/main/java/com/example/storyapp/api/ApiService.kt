@@ -11,9 +11,17 @@ import retrofit2.http.*
 
 interface ApiService {
     @GET("stories")
-    fun getStories(
-        @Header("Authorization") token: String
+    fun getStoriesWithLocation(
+        @Header("Authorization") token: String,
+        @Query("location") includeLocation: Int? = null
     ): Call<StoriesResponse>
+
+    @GET("stories")
+    suspend fun getStoriesPaging(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int? = null,
+        @Query("size") size: Int? = null,
+    ): StoriesResponse
 
     @FormUrlEncoded
     @POST("register")
@@ -35,7 +43,9 @@ interface ApiService {
     fun uploadStory(
         @Header("Authorization") token: String,
         @Part photo: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody,
+        @Part("lat") lat: Double? = null,
+        @Part("lon") lon: Double? = null,
     ): Call<UploadStoryResponse>
 
 }

@@ -21,6 +21,8 @@ import com.example.storyapp.viewmodels.SignupViewModel
 import com.example.storyapp.models.UserPreference
 import com.example.storyapp.viewmodels.ViewModelFactory
 import com.example.storyapp.api.ApiConfig
+import com.example.storyapp.api.ApiService
+import com.example.storyapp.data.StoryRepository
 import com.example.storyapp.databinding.ActivitySignUpBinding
 import com.example.storyapp.responses.RegisterResponse
 import org.json.JSONObject
@@ -31,13 +33,20 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class SignUpActivity : AppCompatActivity() {
 
+    private lateinit var storyRepo: StoryRepository
     private lateinit var binding: ActivitySignUpBinding
     private lateinit var viewModel: SignupViewModel
+    private lateinit var apiService: ApiService
+    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        apiService = ApiConfig.getApiService()
+        context = this@SignUpActivity
+        storyRepo = StoryRepository(apiService, context)
 
         setupView()
         setupViewModel()
@@ -77,7 +86,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
+            ViewModelFactory(UserPreference.getInstance(dataStore), storyRepo)
         )[SignupViewModel::class.java]
     }
 

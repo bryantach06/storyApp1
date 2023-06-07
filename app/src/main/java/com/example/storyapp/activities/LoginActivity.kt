@@ -18,6 +18,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.example.storyapp.*
+import com.example.storyapp.api.ApiConfig
+import com.example.storyapp.api.ApiService
+import com.example.storyapp.data.StoryRepository
 import com.example.storyapp.databinding.ActivityLoginPageBinding
 import com.example.storyapp.models.UserModel
 import com.example.storyapp.models.UserPreference
@@ -28,9 +31,12 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var storyRepo: StoryRepository
     private lateinit var binding: ActivityLoginPageBinding
     private lateinit var viewModel: LoginViewModel
     private lateinit var user: UserModel
+    private lateinit var apiService: ApiService
+    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,10 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
+
+        apiService = ApiConfig.getApiService()
+        context = this@LoginActivity
+        storyRepo = StoryRepository(apiService, context)
 
         setupView()
         setupViewModel()
@@ -80,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
+            ViewModelFactory(UserPreference.getInstance(dataStore), storyRepo)
         )[LoginViewModel::class.java]
 
         viewModel.getUser().observe(this) { user ->

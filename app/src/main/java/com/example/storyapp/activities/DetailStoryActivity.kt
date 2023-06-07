@@ -1,6 +1,7 @@
 package com.example.storyapp.activities
 
 import android.annotation.SuppressLint
+import android.icu.text.SimpleDateFormat
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.WindowManager
 import com.bumptech.glide.Glide
 import com.example.storyapp.databinding.ActivityDetailStoryBinding
 import com.example.storyapp.responses.ListStoryItem
+import java.util.Locale
 
 class DetailStoryActivity : AppCompatActivity() {
 
@@ -42,7 +44,13 @@ class DetailStoryActivity : AppCompatActivity() {
         binding.apply {
             tvDetailName.text = detail.name
             tvDetailStory.text = detail.description
-            tvDetailCreatedAt.text = "Uploaded at ${detail.createdAt}"
+
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("MMM dd, yyyy - hh:mm a", Locale.getDefault())
+            val date = inputFormat.parse(detail.createdAt)
+            val formattedDateTimeString = outputFormat.format(date)
+
+            tvDetailCreatedAt.text = formattedDateTimeString
             Glide.with(this@DetailStoryActivity)
                 .load(detail.photoUrl)
                 .into(ivDetailStory)

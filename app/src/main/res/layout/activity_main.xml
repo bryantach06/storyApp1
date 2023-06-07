@@ -51,27 +51,34 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
+        android:contentDescription="@string/add_story_fab"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@android:drawable/ic_menu_edit"
-        android:contentDescription="@string/add_story_fab"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_welcome_back"
+        android:contentDescription="@string/logout_button"
+        app:layout_constraintBottom_toTopOf="@+id/fab_add_story"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_welcome_back"
-        app:layout_constraintTop_toTopOf="@+id/tv_welcome_back"
-        app:srcCompat="@drawable/baseline_logout_15"
-        android:contentDescription="@string/logout_button" />
+        app:srcCompat="@drawable/baseline_logout_15" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/fab_logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/baseline_location_on_24"
+        android:contentDescription="@string/maps_activity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
